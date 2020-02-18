@@ -897,6 +897,9 @@ BOOL isExiting = FALSE;
     }
     if(![_browserOptions.webbutton isEqualToString:@"none"]){
         self.shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareAction:)];
+        if (_browserOptions.navigationbuttoncolor != nil) { // Set button color if user sets it in options
+          self.shareButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
+        }
         self.shareButton.imageInsets = UIEdgeInsetsMake(8, 0.0, 0, 0);
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton,fixedSpaceButton2,self.shareButton]];
     }else [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
