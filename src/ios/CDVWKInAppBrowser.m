@@ -824,7 +824,8 @@ BOOL isExiting = FALSE;
     
     UIBarButtonItem* fixedSpaceButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     fixedSpaceButton.width = 20;
-    
+    UIBarButtonItem* fixedSpaceButton2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedSpaceButton2.width = 15;
     float toolbarY = toolbarIsAtBottom ? self.view.bounds.size.height - TOOLBAR_HEIGHT : 0.0;
     CGRect toolbarFrame = CGRectMake(0.0, toolbarY, self.view.bounds.size.width, TOOLBAR_HEIGHT);
     
@@ -894,24 +895,38 @@ BOOL isExiting = FALSE;
     if (_browserOptions.navigationbuttoncolor != nil) { // Set button color if user sets it in options
       self.backButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
     }
-
+    if(![_browserOptions.webbutton isEqualToString:@"none"]){
+        self.shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareAction:)];
+        self.shareButton.imageInsets = UIEdgeInsetsMake(8, 0.0, 0, 0);
+        [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton,fixedSpaceButton2,self.shareButton]];
+    }else [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     // Filter out Navigation Buttons if user requests so
-    if (_browserOptions.hidenavigationbuttons) {
-        if (_browserOptions.lefttoright) {
-            [self.toolbar setItems:@[flexibleSpaceButton, self.closeButton]];
-        } else {
-            [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton]];
-        }
-    } else if (_browserOptions.lefttoright) {
-        [self.toolbar setItems:@[self.backButton, fixedSpaceButton, self.forwardButton, flexibleSpaceButton, self.closeButton]];
-    } else {
-        [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
-    }
+//    if (_browserOptions.hidenavigationbuttons) {
+//        if (_browserOptions.lefttoright) {
+//            [self.toolbar setItems:@[flexibleSpaceButton, self.closeButton]];
+//        } else {
+//            [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton]];
+//        }
+//    } else if (_browserOptions.lefttoright) {
+//        [self.toolbar setItems:@[self.backButton, fixedSpaceButton, self.forwardButton, flexibleSpaceButton, self.closeButton]];
+//    } else {
+//        [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
+//    }
     
     self.view.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
+}
+-(void)shareAction:(id)sender
+{
+    NSLog(@"share action");
+//    if(_browserOptions.shareable){
+//        //self.shareURL = [self.currentURL absoluteString];
+//        [self close];
+//    }else{
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[self.currentURL absoluteString]]];
+    //}
 }
 
 - (void) setWebViewFrame : (CGRect) frame {

@@ -48,6 +48,7 @@
         self.toolbarcolor = nil;
         self.toolbartranslucent = YES;
         self.beforeload = @"";
+        self.webbutton = @"";
     }
 
     return self;
